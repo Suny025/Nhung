@@ -1,0 +1,240 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+class Student
+{
+    //1. Field
+    private string studentID;
+    private string fullName;
+    private float averageScore;
+    private string faculty;
+
+    //2. Property
+    public string StudentID { get => studentID; set => studentID = value; }
+    public string FullName { get => fullName; set => fullName = value; }
+    public float AverageScore { get => averageScore; set => averageScore = value; }
+    public string Faculty { get => faculty; set => faculty = value; }
+
+    //3. Constructor
+    public Student() { }
+
+    public Student(string studentID, string fullName, float averageScore, string faculty)
+    {
+        this.studentID = studentID;
+        this.fullName = fullName;
+        this.averageScore = averageScore;
+        this.faculty = faculty;
+    }
+
+    //4. Methods
+    public void Input()
+    {
+        Console.Write("Nhap MSSV: ");
+        StudentID = Console.ReadLine();
+
+        Console.Write("Nhap Ho ten: ");
+        FullName = Console.ReadLine();
+
+        Console.Write("Nhap Diem TB: ");
+        AverageScore = float.Parse(Console.ReadLine());
+
+        Console.Write("Nhap Khoa: ");
+        Faculty = Console.ReadLine();
+    }
+
+    public void Show()
+    {
+        Console.WriteLine($"MSSV: {StudentID} | Ho ten: {FullName} | Khoa: {Faculty} | Diem TB: {AverageScore}");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        List<Student> studentList = new List<Student>();
+        bool exit = false;
+
+        while (!exit)
+        {
+            Console.WriteLine("===== MENU =====");
+            Console.WriteLine("1. Them sinh vien");
+            Console.WriteLine("2. Hien thi danh sach sinh vien");
+            Console.WriteLine("3. Sinh vien thuoc khoa CNTT");
+            Console.WriteLine("4. Sinh vien co diem TB >= 5");
+            Console.WriteLine("5. Sap xep theo diem TB tang dan");
+            Console.WriteLine("6. Sinh vien co DTB >= 5 va thuoc khoa CNTT");
+            Console.WriteLine("7. Sinh vien co diem TB cao nhat thuoc khoa CNTT");
+            Console.WriteLine("8. So luong sinh vien theo tung xep loai");
+            Console.WriteLine("0. Thoat");
+            Console.Write("Chon chuc nang (0-8): ");
+
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    AddStudent(studentList);
+                    break;
+
+                case "2":
+                    DisplayStudentList(studentList);
+                    break;
+
+                case "3":
+                    DisplayStudentsByFaculty(studentList, "CNTT");
+                    break;
+
+                case "4":
+                    DisplayStudentsWithHighAverageScore(studentList, 5);
+                    break;
+
+                case "5":
+                    SortStudentsByAverageScore(studentList);
+                    break;
+
+                case "6":
+                    DisplayStudentsByFacultyAndScore(studentList, "CNTT", 5);
+                    break;
+
+                case "7":
+                    DisplayStudentsWithHighestAverageScoreByFaculty(studentList, "CNTT");
+                    break;
+
+                case "8":
+                    CountStudentByRank(studentList);
+                    break;
+
+                case "0":
+                    exit = true;
+                    Console.WriteLine("Ket thuc chuong trinh!");
+                    break;
+
+                default:
+                    Console.WriteLine("Lua chon khong hop le, vui long chon lai.");
+                    break;
+            }
+
+            Console.WriteLine();
+        }
+    }
+
+    // ====== CAC HAM CHUC NANG ======
+
+    static void AddStudent(List<Student> studentList)
+    {
+        Console.WriteLine("=== Nhap thong tin sinh vien ===");
+        Student s = new Student();
+        s.Input();
+        studentList.Add(s);
+
+        Console.WriteLine("Them sinh vien thanh cong!");
+    }
+
+    static void DisplayStudentList(List<Student> list)
+    {
+        if (!list.Any())
+        {
+            Console.WriteLine("Danh sach trong!");
+            return;
+        }
+
+        Console.WriteLine("=== Danh sach sinh vien ===");
+        foreach (var s in list)
+            s.Show();
+    }
+
+    // Case 3: Sinh vien khoa CNTT
+    static void DisplayStudentsByFaculty(List<Student> students, string faculty)
+    {
+        Console.WriteLine($"=== Sinh vien khoa {faculty} ===");
+
+        var result = students
+            .Where(s => s.Faculty.Equals(faculty, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        DisplayStudentList(result);
+    }
+
+    // Case 4: Diem TB >= 5
+    static void DisplayStudentsWithHighAverageScore(List<Student> students, float minScore)
+    {
+        Console.WriteLine($"=== Sinh vien co diem TB >= {minScore} ===");
+
+        var result = students
+            .Where(s => s.AverageScore >= minScore)
+            .ToList();
+
+        DisplayStudentList(result);
+    }
+
+    // Case 5: Sap xep theo diem TB tang dan
+    static void SortStudentsByAverageScore(List<Student> students)
+    {
+        Console.WriteLine("=== Sap xep theo diem TB tang dan ===");
+
+        var sorted = students
+            .OrderBy(s => s.AverageScore)
+            .ToList();
+
+        DisplayStudentList(sorted);
+    }
+
+    // Case 6: DTB >=5 va khoa CNTT
+    static void DisplayStudentsByFacultyAndScore(List<Student> students, string faculty, float minScore)
+    {
+        Console.WriteLine($"=== Sinh vien khoa {faculty} va DTB >= {minScore} ===");
+
+        var result = students
+            .Where(s => s.Faculty.Equals(faculty, StringComparison.OrdinalIgnoreCase)
+                     && s.AverageScore >= minScore)
+            .ToList();
+
+        DisplayStudentList(result);
+    }
+
+    // Case 7: Sinh vien diem cao nhat CNTT
+    static void DisplayStudentsWithHighestAverageScoreByFaculty(List<Student> students, string faculty)
+    {
+        Console.WriteLine($"=== Sinh vien diem cao nhat khoa {faculty} ===");
+
+        var inFaculty = students
+            .Where(s => s.Faculty.Equals(faculty, StringComparison.OrdinalIgnoreCase));
+
+        if (!inFaculty.Any())
+        {
+            Console.WriteLine("Khong co sinh vien trong khoa nay!");
+            return;
+        }
+
+        float maxScore = inFaculty.Max(s => s.AverageScore);
+
+        var result = inFaculty
+            .Where(s => s.AverageScore == maxScore)
+            .ToList();
+
+        DisplayStudentList(result);
+    }
+
+    // Case 8: Dem so luong sinh vien theo xep loai
+    static void CountStudentByRank(List<Student> students)
+    {
+        Console.WriteLine("=== So luong sinh vien theo xep loai ===");
+
+        var rankGroups = students
+            .GroupBy(s =>
+            {
+                if (s.AverageScore >= 9) return "Xuat sac";
+                if (s.AverageScore >= 8) return "Gioi";
+                if (s.AverageScore >= 7) return "Kha";
+                if (s.AverageScore >= 5) return "Trung binh";
+                if (s.AverageScore >= 4) return "Yeu";
+                return "Kem";
+            })
+            .Select(g => new { Rank = g.Key, Count = g.Count() });
+
+        foreach (var r in rankGroups)
+            Console.WriteLine($"{r.Rank}: {r.Count} sinh vien");
+    }
+}
