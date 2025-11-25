@@ -1,0 +1,110 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp3
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+            this.BackColor = Color.LightSteelBlue;
+
+            groupBox1.BackColor = Color.White;
+
+            listView1.BackColor = Color.White;
+            listView1.ForeColor = Color.Black;
+
+            textBox1.BackColor = Color.White;
+            textBox2.BackColor = Color.White;
+            textBox3.BackColor = Color.White;
+
+            button1.BackColor = Color.LightGray;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.FlatAppearance.BorderSize = 1;
+            button1.FlatAppearance.BorderColor = Color.Black;
+
+
+            // Thiết lập ListView ngay trong constructor
+            listView1.View = View.Details;
+            listView1.FullRowSelect = true;
+            listView1.GridLines = true;
+
+            listView1.Columns.Add("Last Name", 120);
+            listView1.Columns.Add("First Name", 120);
+            listView1.Columns.Add("Phone", 100);
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Khi chọn 1 dòng → hiển thị lên textbox
+            if (listView1.SelectedItems.Count > 0)
+            {
+                ListViewItem item = listView1.SelectedItems[0];
+
+                textBox1.Text = item.SubItems[0].Text; // Last name
+                textBox2.Text = item.SubItems[1].Text; // First name
+                textBox3.Text = item.SubItems[2].Text; // Phone
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // NÚT ADD
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // tạo item mới
+            ListViewItem item = new ListViewItem(textBox1.Text);
+            item.SubItems.Add(textBox2.Text);
+            item.SubItems.Add(textBox3.Text);
+
+            // thêm vào listview
+            listView1.Items.Add(item);
+
+            // xóa textbox
+            textBox1.Clear();
+            textBox2.Clear();
+            textBox3.Clear();
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
