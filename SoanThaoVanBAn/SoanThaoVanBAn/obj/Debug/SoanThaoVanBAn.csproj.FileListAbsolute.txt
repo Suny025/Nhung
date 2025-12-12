@@ -1,0 +1,10 @@
+D:\Bài ộp\SoanThaoVanBAn\SoanThaoVanBAn\obj\Debug\SoanThaoVanBAn.csproj.AssemblyReference.cache
+D:\Bài ộp\SoanThaoVanBAn\SoanThaoVanBAn\obj\Debug\Lab03_02.Form1.resources
+D:\Bài ộp\SoanThaoVanBAn\SoanThaoVanBAn\obj\Debug\SoanThaoVanBAn.Properties.Resources.resources
+D:\Bài ộp\SoanThaoVanBAn\SoanThaoVanBAn\obj\Debug\SoanThaoVanBAn.csproj.GenerateResource.cache
+D:\Bài ộp\SoanThaoVanBAn\SoanThaoVanBAn\obj\Debug\SoanThaoVanBAn.csproj.CoreCompileInputs.cache
+D:\Bài ộp\SoanThaoVanBAn\SoanThaoVanBAn\bin\Debug\SoanThaoVanBAn.exe.config
+D:\Bài ộp\SoanThaoVanBAn\SoanThaoVanBAn\bin\Debug\SoanThaoVanBAn.exe
+D:\Bài ộp\SoanThaoVanBAn\SoanThaoVanBAn\bin\Debug\SoanThaoVanBAn.pdb
+D:\Bài ộp\SoanThaoVanBAn\SoanThaoVanBAn\obj\Debug\SoanThaoVanBAn.exe
+D:\Bài ộp\SoanThaoVanBAn\SoanThaoVanBAn\obj\Debug\SoanThaoVanBAn.pdb
