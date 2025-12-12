@@ -1,141 +1,116 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Text;
+using System.IO;
 using System.Windows.Forms;
 
-namespace WindowsFormsApp5
+namespace Lab03_02
 {
     public partial class Form1 : Form
     {
+        string currentFile = "";   // lưu đường dẫn file
+        bool isSaved = true;      // file đã lưu hay chưa
+
         public Form1()
         {
             InitializeComponent();
         }
 
+        // ---------------------------- FORM LOAD ----------------------------
+
         private void Form1_Load(object sender, EventArgs e)
         {
-            // Chọn mặc định khoa QTKD
-            cmbFaculty.SelectedIndex = 0;
-            // Giới tính Nữ mặc định
-            optFemale.Checked = true;
-            // Tổng SV Nam/Nữ = 0
-            txtMaleCount.Text = "0";
-            txtFemaleCount.Text = "0";
+            // Load tất cả font hệ thống
+            foreach (FontFamily f in new InstalledFontCollection().Families)
+            {
+                cb_Font.Items.Add(f.Name);
+            }
+
+            // Load size
+            int[] sizes = { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
+            foreach (int s in sizes)
+                cb_Size.Items.Add(s);
+
+            // Thiết lập mặc định
+            cb_Font.Text = "Tahoma";
+            cb_Size.Text = "14";
+            rtb_vanban.Font = new Font("Tahoma", 14);
+
+            
         }
 
-        // Lấy index của dòng có MSSV
-        private int GetSelectedRow(string studentID)
+        // ---------------------------- ĐỊNH DẠNG CHỮ ----------------------------
+
+        
+        private void btn_bold_Click_1(object sender, EventArgs e)
         {
-            for (int i = 0; i < dgvStudent.Rows.Count; i++)
+            if (rtb_vanban.SelectionFont == null) return;
+
+            Font f = rtb_vanban.SelectionFont;
+            FontStyle style = f.Style ^ FontStyle.Bold;
+            rtb_vanban.SelectionFont = new Font(f.FontFamily, f.Size, style);
+
+        }
+
+        private void btn_italic_Click_1(object sender, EventArgs e)
+        {
+            if (rtb_vanban.SelectionFont == null) return;
+
+            Font f = rtb_vanban.SelectionFont;
+            FontStyle style = f.Style ^ FontStyle.Italic;
+            rtb_vanban.SelectionFont = new Font(f.FontFamily, f.Size, style);
+        }
+
+        private void btn_underline_Click_1(object sender, EventArgs e)
+        {
+            if (rtb_vanban.SelectionFont == null) return;
+
+            Font f = rtb_vanban.SelectionFont;
+            FontStyle style = f.Style ^ FontStyle.Underline;
+            rtb_vanban.SelectionFont = new Font(f.FontFamily, f.Size, style);
+        }
+
+        private void cb_Size_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cb_Font_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            if (currentFile == "")
             {
-                if (dgvStudent.Rows[i].Cells[0].Value != null &&
-                    dgvStudent.Rows[i].Cells[0].Value.ToString() == studentID)
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = "RTF File (*.rtf)|*.rtf";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    return i;
+                    currentFile = sfd.FileName;
+                    rtb_vanban.SaveFile(currentFile);
+                    MessageBox.Show("Đã lưu!");
+                    isSaved = true;
                 }
-            }
-            return -1;
-        }
-
-        // Thêm hoặc Cập nhật dữ liệu
-        private void InsertUpdate(int rowIndex)
-        {
-            dgvStudent.Rows[rowIndex].Cells[0].Value = txtStudentID.Text;
-            dgvStudent.Rows[rowIndex].Cells[1].Value = txtFullName.Text;
-            dgvStudent.Rows[rowIndex].Cells[2].Value = optFemale.Checked ? "Nữ" : "Nam";
-            dgvStudent.Rows[rowIndex].Cells[3].Value = txtAverageScore.Text;
-            dgvStudent.Rows[rowIndex].Cells[4].Value = cmbFaculty.Text;
-        }
-
-        private void btnUpdate_Click(object sender, EventArgs e)
-        {
-            // Kiểm tra thông tin bắt buộc
-            if (string.IsNullOrWhiteSpace(txtStudentID.Text) ||
-                string.IsNullOrWhiteSpace(txtFullName.Text) ||
-                string.IsNullOrWhiteSpace(txtAverageScore.Text))
-            {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            int rowIndex = GetSelectedRow(txtStudentID.Text);
-            if (rowIndex == -1)
-            {
-                // Thêm mới
-                dgvStudent.Rows.Add(txtStudentID.Text, txtFullName.Text,
-                                    optFemale.Checked ? "Nữ" : "Nam",
-                                    txtAverageScore.Text, cmbFaculty.Text);
-                MessageBox.Show("Thêm mới dữ liệu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                // Cập nhật
-                InsertUpdate(rowIndex);
-                MessageBox.Show("Cập nhật dữ liệu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                rtb_vanban.SaveFile(currentFile);
+                MessageBox.Show("Đã lưu!");
             }
-
-            // Cập nhật tổng số SV Nam/Nữ
-            UpdateGenderCount();
         }
 
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            int rowIndex = GetSelectedRow(txtStudentID.Text);
-            if (rowIndex == -1)
-            {
-                MessageBox.Show("Không tìm thấy MSSV cần xóa!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            rtb_vanban.Clear();
+            cb_Font.Text = "Tahoma";
+            cb_Size.Text = "14";
+            rtb_vanban.Font = new Font("Tahoma", 14);
 
-            if (MessageBox.Show("Bạn có chắc muốn xóa sinh viên này?", "Xác nhận",
-                                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-            {
-                dgvStudent.Rows.RemoveAt(rowIndex);
-                MessageBox.Show("Xóa sinh viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // Cập nhật tổng số SV Nam/Nữ
-                UpdateGenderCount();
-            }
+            currentFile = "";
+            isSaved = false;
         }
-
-        private void dgvStudent_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                txtStudentID.Text = dgvStudent.Rows[e.RowIndex].Cells[0].Value.ToString();
-                txtFullName.Text = dgvStudent.Rows[e.RowIndex].Cells[1].Value.ToString();
-                string gender = dgvStudent.Rows[e.RowIndex].Cells[2].Value.ToString();
-                if (gender == "Nam")
-                    optMale.Checked = true;
-                else
-                    optFemale.Checked = true;
-
-                txtAverageScore.Text = dgvStudent.Rows[e.RowIndex].Cells[3].Value.ToString();
-                cmbFaculty.Text = dgvStudent.Rows[e.RowIndex].Cells[4].Value.ToString();
-            }
-        }
-
-        private void UpdateGenderCount()
-        {
-            int male = 0, female = 0;
-            foreach (DataGridViewRow row in dgvStudent.Rows)
-            {
-                if (row.Cells[2].Value != null)
-                {
-                    if (row.Cells[2].Value.ToString() == "Nam") male++;
-                    else if (row.Cells[2].Value.ToString() == "Nữ") female++;
-                }
-            }
-            txtMaleCount.Text = male.ToString();
-            txtFemaleCount.Text = female.ToString();
-        }
-
-        // Các event handlers rỗng để tránh lỗi Designer
-        private void txtStudentID_TextChanged(object sender, EventArgs e) { }
-        private void txtFullName_TextChanged(object sender, EventArgs e) { }
-        private void optMale_CheckedChanged(object sender, EventArgs e) { }
-        private void optFemale_CheckedChanged(object sender, EventArgs e) { }
-        private void txtAverageScore_TextChanged(object sender, EventArgs e) { }
-        private void cmbFaculty_SelectedIndexChanged(object sender, EventArgs e) { }
-        private void txtMaleCount_TextChanged(object sender, EventArgs e) { }
-        private void txtFemaleCount_TextChanged(object sender, EventArgs e) { }
     }
 }
