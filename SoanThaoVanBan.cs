@@ -8,15 +8,13 @@ namespace Lab03_02
 {
     public partial class Form1 : Form
     {
-        string currentFile = "";   // lưu đường dẫn file
-        bool isSaved = true;      // file đã lưu hay chưa
+        string currentFile = "";   
+        bool isSaved = true;      
 
         public Form1()
         {
             InitializeComponent();
         }
-
-        // ---------------------------- FORM LOAD ----------------------------
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -39,7 +37,7 @@ namespace Lab03_02
             
         }
 
-        // ---------------------------- ĐỊNH DẠNG CHỮ ----------------------------
+       
 
         
         private void btn_bold_Click_1(object sender, EventArgs e)
@@ -114,3 +112,4 @@ namespace Lab03_02
         }
     }
 }
+
